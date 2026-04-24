@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTAGE動画教材 検索 ｜ Bright Up</title>
+<meta name="description" content="ハンドメイド販売講座の動画教材をキーワードで検索できる学習ライブラリ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+
+:root {
+  --cream: #f2ece5;
+  --cream-soft: #f8f4ee;
+  --cream-deep: #e8dfd2;
+  --navy: #1c2c44;
+  --navy-deep: #15233a;
+  --navy-soft: #2d3f5a;
+  --navy-light: #3a4a64;
+  --darkred: #660000;
+  --darkred-soft: #8b1a1a;
+  --mauve: #936c80;
+  --mauve-soft: #b08c9e;
+  --mauve-pale: #c9a9b8;
+  --gold: #b08c50;
+  --gold-soft: #c9a96e;
+  --line: rgba(28, 44, 68, 0.12);
+  --line-strong: rgba(28, 44, 68, 0.25);
+  --line-cream: rgba(242, 236, 229, 0.15);
+  --line-cream-strong: rgba(242, 236, 229, 0.3);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  background: var(--cream);
+  color: var(--navy);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ========== HERO（ネイビー帯） ========== */
+.hero {
+  background: var(--navy);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ボタニカル装飾 */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(147, 108, 128, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(176, 140, 80, 0.10) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 24px 48px;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--mauve-pale);
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.eyebrow::before, .eyebrow::after {
+  content: '';
+  width: 50px;
+  height: 1px;
+  background: var(--mauve-pale);
+  opacity: 0.6;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: 0.05em;
+  color: var(--cream);
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+h1 .accent {
+  color: var(--gold-soft);
+  font-weight: 600;
+  font-style: italic;
+  margin-left: 6px;
+}
+
+.tagline {
+  font-size: 14px;
+  color: var(--mauve-pale);
+  letter-spacing: 0.1em;
+  margin-bottom: 38px;
+  font-weight: 400;
+}
+
+/* SEARCH（ネイビー帯の中） */
+.search-box {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 18px 56px 18px 24px;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+  background: var(--cream);
+  border: 1.5px solid transparent;
+  border-radius: 4px;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.search-input::placeholder {
+  color: var(--navy-soft);
+  opacity: 0.55;
+  font-weight: 400;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--gold-soft);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(176, 140, 80, 0.25);
+}
+
+.search-icon {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--navy-soft);
+  pointer-events: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--navy);
+  border: none;
+  color: var(--cream);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.search-clear:hover {
+  background: var(--darkred);
+}
+
+/* ========== CONTENT（クリーム帯） ========== */
+
+/* CATEGORY FILTER */
+.filter-area {
+  background: var(--cream);
+  padding: 32px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.filter-area::before {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  z-index: -1;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  background: transparent;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 100px;
+  color: var(--navy);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.chip:hover {
+  border-color: var(--navy);
+  background: rgba(28, 44, 68, 0.05);
+}
+
+.chip.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--cream);
+  font-weight: 600;
+}
+
+.chip .count {
+  font-size: 11px;
+  opacity: 0.65;
+  font-weight: 400;
+}
+
+.chip.active .count {
+  opacity: 0.85;
+}
+
+/* META BAR */
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 0 28px;
+  border-bottom: 1.5px solid var(--line);
+  margin-bottom: 32px;
+  margin-top: 24px;
+}
+
+.result-count {
+  font-size: 15px;
+  color: var(--navy-soft);
+  font-weight: 500;
+}
+
+.result-count strong {
+  color: var(--darkred);
+  font-weight: 700;
+  font-size: 20px;
+  margin: 0 4px;
+}
+
+.sort-info {
+  font-size: 11px;
+  color: var(--mauve);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* CARDS GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  padding-bottom: 100px;
+}
+
+.card {
+  position: relative;
+  background: var(--cream-soft);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 26px 24px 22px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease backwards;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--navy);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover {
+  border-color: var(--navy);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(28, 44, 68, 0.18);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover .card-category,
+.card:hover .card-title,
+.card:hover .card-summary,
+.card:hover .keyword-tag,
+.card:hover .cta-text {
+  color: var(--cream);
+}
+
+.card:hover .card-category {
+  border-bottom-color: var(--line-cream-strong);
+  color: var(--mauve-pale);
+}
+
+.card:hover .keyword-tag {
+  background: rgba(242, 236, 229, 0.12);
+  color: var(--cream);
+}
+
+.card:hover .card-cta {
+  border-top-color: var(--line-cream-strong);
+}
+
+.card:hover .cta-arrow {
+  background: var(--gold-soft);
+  border-color: var(--gold-soft);
+  color: var(--navy);
+  transform: translateX(4px);
+}
+
+.card-category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mauve);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--navy);
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+  transition: color 0.3s ease;
+}
+
+.card-summary {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--navy-soft);
+  margin-bottom: 20px;
+  flex: 1;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.card-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.keyword-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  background: var(--cream-deep);
+  color: var(--navy);
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  transition: border-color 0.3s ease;
+}
+
+.cta-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--darkred);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.cta-arrow {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--darkred);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--darkred);
+  transition: all 0.3s ease;
+}
+
+.card.no-url {
+  cursor: default;
+  opacity: 0.55;
+}
+.card.no-url:hover {
+  transform: none;
+  border-color: var(--line);
+  box-shadow: none;
+}
+.card.no-url:hover::before { opacity: 0; }
+.card.no-url:hover .card-category,
+.card.no-url:hover .card-title,
+.card.no-url:hover .card-summary,
+.card.no-url:hover .keyword-tag,
+.card.no-url:hover .cta-text {
+  color: var(--mauve);
+}
+.card.no-url:hover .card-category {
+  color: var(--mauve);
+  border-bottom-color: var(--line);
+}
+.card.no-url:hover .card-title { color: var(--navy); }
+.card.no-url:hover .card-summary { color: var(--navy-soft); }
+.card.no-url:hover .keyword-tag {
+  background: var(--cream-deep);
+  color: var(--navy);
+}
+.card.no-url:hover .cta-arrow {
+  background: transparent;
+  color: var(--mauve);
+  border-color: var(--mauve);
+  transform: none;
+}
+.card.no-url .cta-text { color: var(--mauve); }
+.card.no-url .cta-arrow {
+  border-color: var(--mauve);
+  color: var(--mauve);
+  border-style: dashed;
+}
+
+/* HIGHLIGHTING */
+.highlight {
+  background: rgba(176, 140, 80, 0.3);
+  color: var(--darkred);
+  font-weight: 700;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+
+.card:hover .highlight {
+  background: rgba(201, 169, 110, 0.4);
+  color: var(--gold-soft);
+}
+
+/* EMPTY STATE */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--mauve);
+  opacity: 0.4;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+.empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.empty-text {
+  color: var(--navy-soft);
+  font-size: 14px;
+}
+
+/* FOOTER（ネイビー） */
+footer {
+  background: var(--navy);
+  color: var(--mauve-pale);
+  padding: 50px 24px 40px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  font-weight: 500;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 1px;
+  background: var(--gold-soft);
+  opacity: 0.6;
+}
+
+footer .ornament {
+  color: var(--gold-soft);
+  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: 300;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card:nth-child(1) { animation-delay: 0.04s; }
+.card:nth-child(2) { animation-delay: 0.08s; }
+.card:nth-child(3) { animation-delay: 0.12s; }
+.card:nth-child(4) { animation-delay: 0.16s; }
+.card:nth-child(5) { animation-delay: 0.2s; }
+.card:nth-child(6) { animation-delay: 0.24s; }
+.card:nth-child(n+7) { animation-delay: 0.28s; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .wrapper { padding: 0 16px; }
+  .hero-inner { padding: 40px 16px 36px; }
+  .filter-area { padding-top: 24px; }
+  .search-input { padding: 16px 52px 16px 22px; font-size: 14px; }
+  .grid { grid-template-columns: 1fr; gap: 16px; }
+  .card { padding: 22px 20px 18px; }
+  .meta-bar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 22px 0 22px; }
+  .filter-row { gap: 6px; }
+  .chip { padding: 7px 14px; font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .eyebrow { font-size: 10px; gap: 10px; letter-spacing: 0.3em; }
+  .eyebrow::before, .eyebrow::after { width: 24px; }
+  h1 { font-size: 24px; }
+  .tagline { font-size: 12.5px; margin-bottom: 28px; }
+  .card-title { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Bright Up · Library</div>
+    <h1>動画教材<span class="accent">Search</span></h1>
+    <p class="tagline">学びたいことを、キーワードから探す</p>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" class="search-input" placeholder="キーワードを入力 — 例：マインド、撮影、リール" autocomplete="off" spellcheck="false">
+      <svg class="search-icon" id="searchIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/>
+      </svg>
+      <button class="search-clear" id="searchClear" aria-label="クリア">×</button>
+    </div>
+  </div>
+</div>
+
+<div class="filter-area">
+  <div class="wrapper">
+    <div class="filter-row" id="filterRow"></div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <div class="meta-bar">
+    <div class="result-count" id="resultCount"></div>
+    <div class="sort-info">— Updated 2026 —</div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+</div>
+
+<footer>
+  <div class="ornament">⁂</div>
+  <div>REBEL MUSES CRAFT · Bright Up Online School</div>
+</footer>
+
+<script>
+// ========== DATA ==========
+const VIDEOS = [
+  {"title": "販売するためのマインド", "category": "マインド", "keywords": ["マインドセット", "販売", "自信"], "summary": "「売れない」という悩みの本質を捉え直し、販売マインドを整えるための授業。売れないのは知られていないだけ。", "url": "https://utage-system.com/video/MAlA65PXNumF"},
+  {"title": "売り上げを上げるための考え方", "category": "マインド", "keywords": ["マインドセット", "販売", "売り上げ"], "summary": "売り上げ＝顧客数×顧客単価の構造を論理的に理解し、優先順位をつけて行動するための授業。感情ではなく数字で考えることが売上アップへの近道。", "url": "https://utage-system.com/video/QH1eGXf6Hnhy"},
+  {"title": "売れない＝向いていない、ではない理由", "category": "マインド", "keywords": ["マインドセット", "販売", "自信"], "summary": "売れない原因は順番・伝え方・タイミングの3つのズレ。向いていないのではなく、やり方を変えれば必ず結果は出せるという前向きな授業。", "url": "https://utage-system.com/video/O1JGudfaTBUj"},
+  {"title": "正しい目標の立て方", "category": "マインド", "keywords": ["マインドセット", "目標設定"], "summary": "最終目的から逆算して、自分で動かせる行動目標を設定する方法を学ぶ授業。数字に振り回されず、着実に前進するための目標設計術。", "url": "https://utage-system.com/video/37Ke7vqU1Nx0"},
+  {"title": "自己肯定感強化術", "category": "マインド", "keywords": ["マインドセット", "自信"], "summary": "失敗はデータ、比較は差別化発見のチャンス。メンタルを安定させながら販売を続けるための4つのメンタルマネジメント術を解説する授業。", "url": "https://utage-system.com/video/MQlLYMMnbjt7"},
+  {"title": "モチベーションは要らない", "category": "マインド", "keywords": ["マインドセット", "目標設定"], "summary": "モチベーションは待つものではなく作るもの。感情に左右されない仕組み化・習慣化で、売れる作家への行動を継続できるようにする授業。", "url": "https://utage-system.com/video/aSY2YC9ttaYT"},
+  {"title": "タスク管理術", "category": "マインド", "keywords": ["マインドセット", "目標設定", "タスク管理"], "summary": "やる気に頼らない仕組み作りのコツ。タスクを行動レベルまで細分化し、緊急度×重要度で優先順位をつける実践的なタスク管理術。", "url": "https://utage-system.com/video/tKwKVX85MZT4"},
+  {"title": "タスク管理術②・Googleカレンダー活用編", "category": "マインド", "keywords": ["マインドセット", "目標設定", "タスク管理"], "summary": "Googleカレンダーを活用したスケジュール管理と時間の使い方を解説。行動を見える化することで、販売活動を継続する習慣が身につく授業。", "url": "https://utage-system.com/video/0XiBJclxu2ZM"},
+  {"title": "言語化力の高め方", "category": "マインド", "keywords": ["マインドセット", "言語化"], "summary": "「伝わる言葉」を自分の中から引き出す言語化力の鍛え方。商品の魅力をお客様に刺さる言葉で表現できるようになるための実践授業。", "url": "https://utage-system.com/video/BI8DDhfQyUua"},
+  {"title": "マインドセットPart1（インスタ運用マインド）", "category": "マインド", "keywords": ["マインドセット", "インスタ"], "summary": "インスタ運用を続けるための根本的なマインドセット。「売るのは悪いこと」という思い込みを手放し、発信を楽しむ心の土台を作る授業。", "url": "https://utage-system.com/video/0IhjTd2Om2of"},
+  {"title": "マインドセット1日目｜マインドが変われば人生が変わる", "category": "マインド", "keywords": ["マインドセット"], "summary": "マインドが変われば行動が変わり、人生が変わる。販売を継続するために必要な考え方の基礎を、5日間集中講座の初日として学ぶ授業。", "url": "https://utage-system.com/video/BCbNpM0g4CZs"},
+  {"title": "マインドセット2日目｜売れる作家と売れない作家の違い", "category": "マインド", "keywords": ["マインドセット", "販売"], "summary": "売れる作家と売れない作家の違いは才能ではなく考え方と行動。成功する作家の共通点を学び、自分の販売スタイルを見直す授業。", "url": "https://utage-system.com/video/yPp4im3ADNth"},
+  {"title": "マインドセット3日目｜現状の理解で未来を変えろ", "category": "マインド", "keywords": ["マインドセット", "目標設定"], "summary": "現状を正確に把握することが未来を変える第一歩。自分のお店の現在地を客観的に分析し、次の戦略を立てる力を身につける授業。", "url": "https://utage-system.com/video/elwGKajaERle"},
+  {"title": "マインドセット4日目｜常識をぶち壊せベネフィット", "category": "マインド", "keywords": ["マインドセット", "ベネフィット"], "summary": "「ベネフィット」を正しく伝えることで購買意欲を高める。お客様の未来シーンを想像した商品説明・発信へ変えるための実践授業。", "url": "https://utage-system.com/video/Rh0ypaO8BLv0"},
+  {"title": "マインドセット5日目｜戦略・設計", "category": "マインド", "keywords": ["マインドセット", "目標設定"], "summary": "売れるための戦略・設計の全体像を把握する授業。何をどの順番でやればいいかが明確になり、迷わず行動できるようになる。", "url": "https://utage-system.com/video/QzDdWy0s0TWs"},
+  {"title": "失敗から成功パターンを見つける ネガティブ分析", "category": "マインド", "keywords": ["分析", "マインドセット"], "summary": "失敗体験を「ネガティブ分析」として活かし、次の成功パターンを見つける授業。うまくいかない時こそ成長の糧になる考え方を学ぶ。", "url": "https://utage-system.com/members/yHt4Gm9Qmskm/course/jIF6zOPftRM5/lesson/lnDcwkquwP24"},
+  {"title": "コンセプト設計", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "「誰のためのどんな商品か」を明確にするコンセプト設計4ステップ。世界観の軸を決めることで、売れるお店の土台を作る授業。", "url": "https://utage-system.com/video/aryCON8I6x5o"},
+  {"title": "お客様を絞るべき理由", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "全員に売ろうとすると誰にも刺さらない。お客様を絞ることで共感が生まれ、選ばれるお店になれる理由を解説した授業。", "url": "https://utage-system.com/video/O3u7yMNZPrFF"},
+  {"title": "ペルソナ設定", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "理想のお客様像を具体的に描き、その人の悩みや欲しいものを深く理解するペルソナ設定4ステップ。刺さる発信と商品づくりの基礎。", "url": "https://utage-system.com/video/GTqvMlwZZK4s"},
+  {"title": "ベネフィット", "category": "ショップ設計基礎", "keywords": ["ベネフィット", "販売"], "summary": "機能説明からベネフィット訴求へ転換するための4ステップ。お客様の購入後の未来を言葉にし、「欲しい」を引き出す発信に変える授業。", "url": "https://utage-system.com/video/iDa5UbuAMAs3"},
+  {"title": "プロダクトアウト・マーケットイン", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "プロダクトアウトとマーケットインの違いと使い分けを学ぶ授業。売れる作家は両方を戦略的に活用していることが分かる。", "url": "https://utage-system.com/video/pPDk8pqgdNeh"},
+  {"title": "競合分析①", "category": "ショップ設計基礎", "keywords": ["分析", "コンセプト"], "summary": "競合3人の分析から自分の「ずらしポイント」を見つける授業。優れるのではなく「異なる」ことで差別化し、選ばれるお店を作る。", "url": "https://utage-system.com/video/gyQkoltuSqPv"},
+  {"title": "競合分析とポジショニング戦略", "category": "ショップ設計基礎", "keywords": ["分析", "コンセプト"], "summary": "競合他社をポジショニングマップで整理し、自分の立ち位置を明確にする授業。市場の中で「唯一の存在」になるための戦略設計。", "url": "https://utage-system.com/video/7zUtm3AGrvqF"},
+  {"title": "\"競合\"を\"先生\"にする ポジショニング戦略", "category": "ショップ設計基礎", "keywords": ["分析", "コンセプト"], "summary": "競合他社を「先生」として分析し、ポジショニング戦略を構築する実践授業。市場での自分の立ち位置を明確にし、選ばれるブランドを作る。", "url": "https://utage-system.com/video/Jdc4zmad8TNU"},
+  {"title": "比較視点で選ばれるブランドへ", "category": "ショップ設計基礎", "keywords": ["分析", "コンセプト"], "summary": "「比較」を味方にして選ばれるブランドを作る授業。競合との違いを明確に打ち出すことで、お客様が「ここで買いたい」と感じるお店づくりを学ぶ。", "url": "https://utage-system.com/video/3sbo1TlLCgdC"},
+  {"title": "世界観の作り方", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "表面の世界観（写真・言葉・フォント）と内側の世界観（ブランドの思想）を統一し、お客様に一貫した魅力を伝えるお店づくりの授業。", "url": "https://utage-system.com/video/H7JxclNQ78oE"},
+  {"title": "コンセプトがある人とない人の違い", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "コンセプトがあるお店とないお店の違いを実例で解説する授業。コンセプトが定まることで商品・発信・接客の全てに一貫性が生まれる。", "url": "https://utage-system.com/video/WM4n747krxpd"},
+  {"title": "ブランディングで得られる効果", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "ブランディングによって価格競争から脱出し、ファンが自然と集まる状態を作る効果を解説する授業。憧れのブランドへの道筋が見える。", "url": "https://utage-system.com/video/rbrARVcIVEOJ"},
+  {"title": "ブランド運営で活用できる心理学", "category": "ショップ設計基礎", "keywords": ["コンセプト", "販売"], "summary": "ハンドメイド販売に使える心理学7選を学ぶ授業。お客様の行動を自然に引き出す言葉・見せ方・タイミングの工夫で購買率を高める。", "url": "https://utage-system.com/video/w4vrpz2ThcXh"},
+  {"title": "セグメント配信をうまく使いこなそう", "category": "ショップ設計基礎", "keywords": ["販売", "コンセプト"], "summary": "バンドワゴン効果・ウィンザー効果など7つの心理学テクニックをセグメント配信に活用し、購買行動を引き出す戦略的な発信術を学ぶ授業。", "url": "https://utage-system.com/video/gTU0seVraXmu"},
+  {"title": "リピーターを増やすきっかけ作り", "category": "ショップ設計基礎", "keywords": ["販売", "コンセプト"], "summary": "新規集客より既存顧客に「もう一度買いたくなる理由」を作る方が利益が上がる。4つの施策でリピーターを増やし安定収益を実現する授業。", "url": "https://utage-system.com/video/CRZKfdoGCQgv"},
+  {"title": "販売場所", "category": "ショップ設計基礎", "keywords": ["販売", "コンセプト"], "summary": "ハンドメイド作品をどこで販売するかが売上を左右する。minne・creema・インスタ・マルシェなど各販売場所の特徴と選び方を解説する授業。", "url": "https://utage-system.com/video/gK3qGL2JVFdp"},
+  {"title": "伸びた時こそ危ない 失敗しないための成功分析", "category": "ショップ設計基礎", "keywords": ["分析", "販売"], "summary": "成功を再現できて初めて実力になる。動いた数字・やった行動・なぜ刺さったかの3点を分析し、成功パターンを次の販売に活かす方法を学ぶ授業。", "url": "https://utage-system.com/video/GvvZXrrrAynS"},
+  {"title": "そもそも戦略って何？", "category": "戦略", "keywords": ["戦略", "分析"], "summary": "「戦略」とは何かをシンプルに解説する入門授業。感覚で動くのをやめ、目的から逆算した計画的な行動ができるようになる思考法を学ぶ。", "url": "https://utage-system.com/video/UZKUtr26pw9q"},
+  {"title": "分析について①", "category": "戦略", "keywords": ["分析", "戦略"], "summary": "お店の現状を正確に数字で把握するための分析基礎。何が売れていて何が滞っているかを見える化し、次の施策に活かす方法を学ぶ。", "url": "https://utage-system.com/video/fSFeyABCU4jm"},
+  {"title": "分析について②", "category": "戦略", "keywords": ["分析", "戦略"], "summary": "分析力をさらに深め、インスタのデータとお店の数字を組み合わせて改善策を立てる授業。「なんとなく分かった」から「確信を持った行動」へ。", "url": "https://utage-system.com/video/GJ1rUecOUDYC"},
+  {"title": "なんとなくをなくす！数字でわかる集客と販売の基本", "category": "戦略", "keywords": ["分析", "戦略"], "summary": "集客と販売の数字を正しく読み、「なんとなく」を排除して根拠ある行動を取る授業。数字を見れば次にやるべきことが自然と分かるようになる。", "url": "https://utage-system.com/video/nsj43pASELbn"},
+  {"title": "なぜ売れないのか 原因の分け方で改善の方向が決まる", "category": "戦略", "keywords": ["分析", "販売"], "summary": "売れない原因を「知られていない・興味が湧かない・購入に踏み込めない」の3段階に分けて改善方向を明確にする授業。問題の本質を正確に掴む。", "url": "https://utage-system.com/video/iREoKm8DjQ4H"},
+  {"title": "数字を見る前に決めるべきたった一つのこと", "category": "戦略", "keywords": ["分析", "戦略"], "summary": "数字を見る前にまず「何のために売るのか」という目的を決める授業。目的が明確になると、全ての行動に迷いがなくなる。", "url": "https://utage-system.com/video/iyDBBbQWAMA7"},
+  {"title": "売れる商品に早変わりする数字の使い方", "category": "戦略", "keywords": ["分析", "戦略"], "summary": "数字を商品説明・告知文に活用して「売れる商品」に変える方法を学ぶ授業。数字が入るだけでお客様の信頼と購買意欲が高まる。", "url": "https://utage-system.com/video/xYMiJZ7CseEF"},
+  {"title": "既存顧客を「ファン」に変えるリピート戦略", "category": "戦略", "keywords": ["販売", "戦略"], "summary": "既存顧客を「ファン」に変えてリピート購入を生み出す戦略を学ぶ授業。新規集客に頼らず、安定した売上を確保するための施策を解説。", "url": "https://utage-system.com/video/oj3q3qx0BWRV"},
+  {"title": "リピートを生む肯定度設計", "category": "戦略", "keywords": ["戦略"], "summary": "お客様の「肯定度（購入への気持ちの高まり）」を設計的に高めてリピートを生む授業。ファンが自然と戻ってきたくなるお店づくりの仕組みを学ぶ。", "url": "https://utage-system.com/video/jQCuPphchNZt"},
+  {"title": "顧客単価を最大化する商品設計と販売戦略", "category": "戦略", "keywords": ["販売", "戦略"], "summary": "客単価を上げる商品設計と販売タイミングを最大化する戦略を学ぶ授業。セット販売・追加購入・価格帯の幅でお客様の満足度と売上を同時に高める。", "url": "https://utage-system.com/video/FiBZy6Mzqrro"},
+  {"title": "駆け込みたくなる仕掛け", "category": "戦略", "keywords": ["コンセプト", "販売"], "summary": "お客様が「今買わなければ」と感じる仕掛けを作る授業。限定性・緊急性を使って販売会への駆け込み購入を生み出す戦略を学ぶ。", "url": "https://utage-system.com/video/5P0WMkT4jJ6t"},
+  {"title": "販売動線設計", "category": "戦略", "keywords": ["販売", "戦略"], "summary": "インスタからminne・LINEへとお客様を自然に導く販売動線の設計方法を学ぶ授業。集客から購買まで迷子を出さない仕組みを作る。", "url": "https://utage-system.com/video/rVs5qUv9q3ld"},
+  {"title": "事例教材ドロイ・マイピック", "category": "戦略", "keywords": ["戦略"], "summary": "実際に売上を上げた作家の事例を通じて、戦略の実践を学ぶ授業。dolloiとマイピックの事例から再現可能な成功パターンを発見する。", "url": "https://utage-system.com/video/53oMS1MdYQKn"},
+  {"title": "マルシェ当日までにすること", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェ当日まで何を準備すべきかをリスト化した授業。当日に集中できるよう事前準備を徹底して、売上最大化のスタートを切る。", "url": "https://utage-system.com/video/KYZrCcFIK3w9"},
+  {"title": "マルシェ当日にすること", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェ当日の行動と動き方を具体的に解説する授業。開場から閉場まで売上を最大化するための動線と立ち回りを事前に把握できる。", "url": "https://utage-system.com/video/Vi5LuIAiDKLw"},
+  {"title": "マルシェ後の行動", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェ来場者の心理を理解し、自然に購入を決断してもらえる接客方法を学ぶ授業。プレッシャーをかけずに売上を上げるコミュニケーション術。", "url": "https://utage-system.com/video/t2BvDmIFOM2Q"},
+  {"title": "マルシェのお客様心理と接客方法", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェでの出会いをオンライン販売会・LINEへとつなぐ仕組みを学ぶ授業。リアル接点をオンライン売上に変換する橋渡し戦略。", "url": "https://utage-system.com/video/xGMTZ7N8Bezg"},
+  {"title": "マルシェの売上目標設定", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェ出展時の売上目標の立て方と根拠ある数字設定を学ぶ授業。目標があると当日の行動に意図が生まれ、売上が変わる。", "url": "https://utage-system.com/video/goim0xc4btu8"},
+  {"title": "マルシェのディスプレイ・POP", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェに持ち込んだ在庫商品を上手に販売する方法を学ぶ授業。在庫を無駄にせず、マルシェをオンライン販売との相乗効果で活用する戦略。", "url": "https://utage-system.com/video/ospgraytXLoC"},
+  {"title": "マルシェから販売会に促す", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "目を引くディスプレイとPOPの作り方を学ぶ授業。商品の魅力を最大限伝える見せ方で、通りすがりのお客様の足を止め購買を促す。", "url": "https://utage-system.com/video/pMzNCToGIf1v"},
+  {"title": "マルシェの在庫商品の販売方法", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェの種類（常設型・イベント型など）と自分のお店に合った選び方を解説する授業。出展前に正しい場所選びで無駄なコストを防ぐ。", "url": "https://utage-system.com/video/NyLeHCcE72Ju"},
+  {"title": "10月マルシェ出展準備", "category": "マルシェ", "keywords": ["販売", "マルシェ"], "summary": "マルシェ終了後に必ずやるべきことを解説する授業。振り返り・お礼・次回出展の準備など、マルシェを次の売上につなげる行動を学ぶ。", "url": ""},
+  {"title": "売れる写真の基本 商品撮影", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "プロが教える売れる商品写真の基本を学ぶ授業。光・背景・構図のポイントを押さえてスマホでもお客様が「欲しい」と感じる写真を撮る。", "url": "https://utage-system.com/video/2E1iL9CXtawJ"},
+  {"title": "アクセサリー撮影の基本", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "アクセサリーの魅力を最大限に引き出す撮影テクニックを学ぶ授業。細部の質感・光の当て方・小物の使い方でクリック率と購入率が上がる。", "url": "https://utage-system.com/video/4SUUto3LEFdR"},
+  {"title": "キラキラ作品をきれいに撮るコツ", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "キラキラした作品をきれいに撮るための反射・光の扱い方を学ぶ授業。繊細な光沢感を写真に収め、作品の輝きをそのまま伝える撮影術。", "url": "https://utage-system.com/video/3m45IjWgb6Zn"},
+  {"title": "バッグ作品の魅力を伝える撮り方", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "バッグ作品の素材感・デザイン・使い勝手を写真で伝える撮影方法を学ぶ授業。お客様が「実際に使っているシーン」を想像できる一枚を作る。", "url": "https://utage-system.com/video/p2dDrpgxQytp"},
+  {"title": "バッグをきれいに撮る", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "バッグ作品をきれいに撮るための最終テクニックを学ぶ授業。形・光・背景の組み合わせで、作品の価値がそのまま伝わる写真を仕上げる。", "url": "https://utage-system.com/video/p2dDrpgxQytp"},
+  {"title": "ネイルチップの撮影方法", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "ネイルチップの繊細なデザインを美しく撮影するプロの技を学ぶ授業。指に装着した状態での撮り方も含め、購買意欲を高める魅力的な写真を作る。", "url": "https://utage-system.com/video/OZxHAxBE3tLb"},
+  {"title": "布小物をかわいく撮るコツ", "category": "商品撮影", "keywords": ["商品撮影"], "summary": "布小物のやわらかさ・かわいらしさを写真で表現するコツを学ぶ授業。素材の温もりが伝わる写真は共感を呼び、お気に入り登録・購入につながる。", "url": "https://utage-system.com/video/C8nYaIha4SuA"},
+  {"title": "インスタプロフィール", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "初見のお客様が「このお店から買いたい」と思えるプロフィールの作り方を学ぶ授業。誰のためのお店かが一目で伝わる言葉と構成を設計する。", "url": "https://utage-system.com/video/s3iCtFtYGh6n"},
+  {"title": "販売動線設計（インスタ）", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "Instagram広告のインサイトデータの読み方を学ぶ授業。広告費を無駄にせず、効果的な改善サイクルを回して費用対効果を最大化する分析術。", "url": "https://utage-system.com/video/rVs5qUv9q3ld"},
+  {"title": "ストーリーズの作り方①", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "フォロワーに飽きられず・愛されるフィード投稿のポイントを学ぶ授業。見た目と内容のバランスで「ずっとフォローしたい」お店を作る。", "url": "https://utage-system.com/video/Lu5OjDZt2NkD"},
+  {"title": "ストーリーズの作り方②", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "購入につながるストーリーズの基本ルールと目的を学ぶ授業。毎日更新が苦手な方でも続けられるシンプルな仕組みを解説する。", "url": "https://utage-system.com/video/W8ZsTBLo3KeH"},
+  {"title": "ストーリーズの作り方③", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "販売会告知を効果的に行うストーリーズの流れを学ぶ授業。告知前・当日・後の発信設計でお客様の期待感を高め、売上を最大化する。", "url": "https://utage-system.com/video/qM89UzapGDpE"},
+  {"title": "認知リールと購入リールの違い", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "ストーリーズを活用したファン化の第3弾。日常のシェアや作業過程を見せることで「この人から買いたい」という親近感と信頼感を育てる。", "url": "https://utage-system.com/video/wm2BesNM32wQ"},
+  {"title": "売れる導線のつくり方", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "クスっと笑えるストーリーズの作り方を学ぶ授業。共感と笑いが購入への距離を縮める。スタンプやアンケートを使った参加型発信術。", "url": "https://utage-system.com/video/T7Hlpjd6QePr"},
+  {"title": "欲しいの生み出し方", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "「認知リール」と「購入リール」の目的の違いを明確に学ぶ授業。どちらを作るべき場面かを判断し、戦略的なリール制作ができるようになる。", "url": "https://utage-system.com/video/YTiGifu4vUS8"},
+  {"title": "リールの作り方", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "インスタ→LINE→販売会→購入という「売れる導線」を設計する授業。お客様が自然に購入まで進む仕組みを作り、告知に頼らず売れる状態を作る。", "url": "https://utage-system.com/video/KEKAuIDgX6m1"},
+  {"title": "心を動かすリール台本", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "見た人の感情を動かすリール台本の作り方を学ぶ授業。「共感→驚き→行動」の流れを設計して再生数と購買を同時に高める台本術。", "url": "https://utage-system.com/video/vYTGvJJbu0xX"},
+  {"title": "初めてのリール制作 準備編", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "フォロワーの中に「欲しい」という感情を生み出す発信の作り方を学ぶ授業。見てもらうだけでなく「買いたい」に変える言葉・映像・タイミングの設計術。", "url": "https://utage-system.com/video/2OcGqGacImcq"},
+  {"title": "初めてのリール制作 作業編", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "15分で作れる！リールの全体的な作り方を解説する授業。構成・撮影・編集の基本フローをマスターして、再生数が上がるリールを効率よく作る。", "url": "https://utage-system.com/video/vHoROrf8xoP3"},
+  {"title": "リールを作る時のポイント解説①", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "初めてのリール制作・実際の編集作業を画面共有で解説する授業。撮影から投稿まで一連の流れを実際に見ながら学べる実践的な内容。", "url": "https://utage-system.com/video/nhL9SBbVifFM"},
+  {"title": "リールを作る時のポイント解説②", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "日常の作業や暮らしを美しく切り取る「Vlog系リール」の作り方を学ぶ授業。憧れを感じさせる世界観で新規フォロワーを自然に増やす発信術。", "url": "https://utage-system.com/video/WtOZuPMeTpRE"},
+  {"title": "憧れをもたせるVlog系リールの作り方", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "日常の作業や暮らしを美しく切り取るVlog系リールで憧れを演出する方法を学ぶ授業。お客様の購買意欲を高める世界観づくりのコツが身につく。", "url": "https://utage-system.com/video/vYTGvJJbu0xX"},
+  {"title": "Instagram広告（基礎知識・作業編）", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "リールを作る前に意識すべきポイントの第1弾。最初の数秒で離脱させない「つかみ」と、最後まで見てもらうための構成の作り方を解説する授業。", "url": "https://utage-system.com/video/eMw3vmgRDQHK"},
+  {"title": "Instagram広告（インサイト編）", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "勉強会への参加を促すLP用動画メッセージ。「インスタに振り回されない集客・センスに依存しない安定感・趣味から仕事への脱却」を訴求する販売マインド全開の動画。", "url": "https://utage-system.com/video/ocRC8a4EOHG9"},
+  {"title": "3月広告活用勉強会", "category": "インスタ", "keywords": ["インスタ", "販売"], "summary": "リール作成ポイントの第2弾。テキスト・音楽・見せ方のコツを深掘りし、視聴維持率とプロフィールへの誘導率を高める発信技術を学ぶ授業。", "url": ""},
+  {"title": "minne・creemaロードマップ", "category": "minne・creema", "keywords": ["販売"], "summary": "minneとCreemaの違い・ユーザー層・手数料・使い分けを解説する授業。両方に登録することで販路を最大化し、売れるプラットフォームを選ぶ基礎知識。", "url": "https://utage-system.com/video/St4a3qmTnqTg"},
+  {"title": "勉強会LP動画", "category": "LP・告知動画", "keywords": ["販売"], "summary": "minne・creemaで売上を伸ばすための段階的なロードマップを学ぶ授業。始めたばかりでも迷わず行動できる道筋が一目で分かる。", "url": "https://utage-system.com/video/UEdvqBw7e9BN"}
+];
+
+// ========== STATE ==========
+let activeCategory = 'すべて';
+let searchQuery = '';
+
+// ========== ELEMENTS ==========
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+const searchIcon = document.getElementById('searchIcon');
+const filterRow = document.getElementById('filterRow');
+const grid = document.getElementById('grid');
+const resultCount = document.getElementById('resultCount');
+
+// ========== HELPERS ==========
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function highlight(text, query) {
+  if (!query) return escapeHtml(text);
+  const escaped = escapeHtml(text);
+  // Split query into terms (space-separated)
+  const terms = query.split(/\s+/).filter(t => t.length > 0).map(escapeRegex);
+  if (terms.length === 0) return escaped;
+  const pattern = new RegExp('(' + terms.join('|') + ')', 'gi');
+  return escaped.replace(pattern, '<span class="highlight">$1</span>');
+}
+
+function matchesSearch(video, query) {
+  if (!query) return true;
+  const terms = query.toLowerCase().split(/\s+/).filter(t => t.length > 0);
+  const haystack = [
+    video.title,
+    video.summary,
+    video.category,
+    ...(video.keywords || [])
+  ].join(' ').toLowerCase();
+  // All terms must match (AND logic)
+  return terms.every(term => haystack.includes(term));
+}
+
+function matchesCategory(video, category) {
+  if (category === 'すべて') return true;
+  return video.category === category;
+}
+
+// ========== RENDER ==========
+function buildCategoryFilter() {
+  const counts = {'すべて': VIDEOS.length};
+  VIDEOS.forEach(v => {
+    counts[v.category] = (counts[v.category] || 0) + 1;
+  });
+  // Order categories
+  const order = ['すべて', 'マインド', 'ショップ設計基礎', '戦略', 'マルシェ', '商品撮影', 'インスタ', 'minne・creema', 'LP・告知動画'];
+  const cats = order.filter(c => counts[c]);
+  filterRow.innerHTML = cats.map(cat => `
+    <button class="chip ${cat === activeCategory ? 'active' : ''}" data-category="${escapeHtml(cat)}">
+      ${escapeHtml(cat)}<span class="count">${counts[cat]}</span>
+    </button>
+  `).join('');
+
+  filterRow.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      activeCategory = chip.dataset.category;
+      buildCategoryFilter();
+      renderResults();
+    });
+  });
+}
+
+function renderResults() {
+  const filtered = VIDEOS.filter(v =>
+    matchesSearch(v, searchQuery) && matchesCategory(v, activeCategory)
+  );
+
+  // Update count
+  if (searchQuery || activeCategory !== 'すべて') {
+    resultCount.innerHTML = `<strong>${filtered.length}</strong> 件の授業`;
+  } else {
+    resultCount.innerHTML = `全 <strong>${filtered.length}</strong> 件の授業`;
+  }
+
+  // Render cards
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⁂</div>
+        <div class="empty-title">該当する授業が見つかりませんでした</div>
+        <div class="empty-text">別のキーワードで検索してみてください</div>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(v => {
+    const hasUrl = v.url && v.url.length > 0;
+    const tag = hasUrl ? 'a' : 'div';
+    const linkAttrs = hasUrl ? `href="${escapeHtml(v.url)}" target="_blank" rel="noopener"` : '';
+    const noUrlClass = hasUrl ? '' : ' no-url';
+    return `
+    <${tag} ${linkAttrs} class="card${noUrlClass}">
+      <span class="card-category">${escapeHtml(v.category)}</span>
+      <h3 class="card-title">${highlight(v.title, searchQuery)}</h3>
+      <p class="card-summary">${highlight(v.summary, searchQuery)}</p>
+      <div class="card-keywords">
+        ${(v.keywords || []).map(k => `<span class="keyword-tag">#${highlight(k, searchQuery)}</span>`).join('')}
+      </div>
+      <div class="card-cta">
+        <span class="cta-text">${hasUrl ? '動画を見る' : '準備中'}</span>
+        <span class="cta-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </span>
+      </div>
+    </${tag}>
+  `;}).join('');
+}
+
+// ========== EVENTS ==========
+searchInput.addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  if (searchQuery) {
+    searchClear.style.display = 'flex';
+    searchIcon.style.display = 'none';
+  } else {
+    searchClear.style.display = 'none';
+    searchIcon.style.display = 'block';
+  }
+  renderResults();
+});
+
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchQuery = '';
+  searchClear.style.display = 'none';
+  searchIcon.style.display = 'block';
+  searchInput.focus();
+  renderResults();
+});
+
+// Keyboard shortcut: / to focus
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+  }
+});
+
+// ========== INIT ==========
+buildCategoryFilter();
+renderResults();
+</script>
+</body>
+</html>
